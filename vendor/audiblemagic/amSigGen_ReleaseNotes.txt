@@ -1,0 +1,200 @@
+RELEASE NOTES
+Audible Magic Signature Generator (amSigGen) for Windows and Linux
+March 13, 2012
+
+Release 7.5
+
+1. Fixed bug from 7.4 where untested multichannel (surround-sound) formats were mistakenly accepted.
+In 7.5, 5.1 AAC in video files are accepted. On Windows, multichannel WMA files are also accepted.
+Earlier releases should not be used to process multichannel files; in some cases these produce fingerprints 
+that will result in false negative identifications.
+
+================================================
+Release 7.4
+
+1. Fixed bug to support files containing 5.1 (surround sound) AAC audio.
+
+================================================
+
+Release 7.3
+
+1. Release for submitted-content (custom database) customers, including new signature format (.mfcc) .
+
+================================================
+
+Release 7.2 (Windows only)
+
+For installation and usage instructions, see 
+"Teaming Up With Audible Magic - Content Registration.pdf," Appendix A.
+
+There was no official release numbered 7.0 or 7.1.
+
+================================================
+Changes from amSigGen 6.9 to amSigGen 7.2
+
+1. New signature format (.mfcc), replacing .am3.
+
+2. Fixed bug where files containing 24- or 32-bit PCM audio (or a compressed
+format that should decode to either of those formats) were not fingerprinted correctly.
+(16-bit audio, as in CD quality, was fine.)
+
+================================================
+Changes from amSigGen 6.9 to amSigGen 6.9a and 7.2
+------------------------------------------------
+
+1. added new option (-S) to CLI which will create an XML containing an
+audio signature for submitted-content customers.
+
+================================================
+Changes from amSigGen 6.8b to amSigGen 6.9
+------------------------------------------------
+
+1. The major changes is that amSigGen will now have access to newer
+versions of the ffmpeg libraries.  There were some media files that
+caused ffmpeg libraries to crash in AMr12 (e.g. some HD .mov files).
+
+
+================================================
+Changes from amSigGen 6.8a to amSigGen 6.8b:
+------------------------------------------------
+
+1. Changed behavior described in point 3 under "Changes from amSigGen 
+6.5 to amSigGen 6.8" below.  Output signature filenames again have the
+same format as prior to 6.8.  The filenames are not necessarily unique,
+and (unlike in earlier releases) pre-existing signature files of the 
+same name will be overwritten.  (A warning is issued indicating this
+is happening, but overwriting proceeds.  This behavior helps ensure that
+the most recent version of the signature accompanies the manifest file.)
+
+================================================
+Changes from amSigGen 6.8 to amSigGen 6.8a:
+------------------------------------------------
+
+1. Fixed a bug, introduced in 6.8, where the manifest files created by
+amSigGen were considered by some software to be incorrect XML.
+
+================================================
+Changes from amSigGen 6.5 to amSigGen 6.8:
+------------------------------------------------
+
+1. Fixed a bug causing bad signatures when multiple copies of amSigGen
+were run concurrently to process Windows Media files.  It is now OK
+to run multiple copies of the executable at the same time.
+
+2. Fixed a bug where amSigGen could not be invoked from outside the
+directory (folder) containing the executable itself.
+
+3. Fixed a bug where the manifest file could refer to signature 
+files from an earlier run of amSigGen.  Output signature filenames are now
+always unique and have a new format.  (For more information, see 
+"Signature Filenames" in Appendix A of the document 
+"Teaming Up With Audible Magic - Content Registration.pdf.")
+
+4. Various improvements in the underlying functions for processing
+audio and video data.
+
+5. The README files have been removed and their information moved into
+the document "Teaming Up With Audible Magic - Content Registration.pdf."
+The PDF file now has a table of contents and other improvements, including
+updated metadata examples (with a new one for a TV show).
+
+6. A new, superior MP3 decoder is being used.
+
+7. The -M option (don't write a manifest file) has been removed from amSigGen.
+
+8. amSigGen no longer produces a manifest file when -x is specified. 
+
+9. Manifest files are now read-only.
+
+10. Two new DLLs are supplied for Windows: libiconv2.dll and libcharset1.dll.
+(On Linux, these libraries are not used and so are not supplied.)
+
+
+================================================
+Changes from amSigGen 6.1a to amSigGen 6.5:
+------------------------------------------------
+
+ffmpeg AMr12 fixes a problem where certain WAV files couldn't be fingerprinted.
+(In amSigGen 5.3, the amSigGen error was "Can't access audio samples in this file."  
+In amSigGen 6.1a, it was "Unsupported media file."  In both cases, the ffmpeg
+executable would get a segmentation fault when asked to read the WAV file.)
+
+Fixed a bug where running amSigGen without -o and specifying an input file
+in a read-only directory could cause a crash.
+
+Fixed a bug, seen with input media files of type FLAC, where the generated signature
+was too short.
+
+Numerous other improvements in mfcbr_client.dll (windows) and ffmpeg to fix various
+bugs in handling problem media files, including certain Windows Media and FLV files.
+
+Files containing multiple video streams result in multiple signature files, just as 
+is the case for multiple audio streams.  (Previously, only one video stream was 
+fingerprinted.)
+
+Various documentation improvements.
+
+Known bug:  Some media files containing AAC audio may be unsupported.
+
+================================================
+Changes from amSigGen 6.1 to amSigGen 6.1a:
+------------------------------------------------
+
+In addition to the previously supported formats, amSigGen 6.1a can decode 
+and fingerprint media files containing streams in H.264 and SVQ3 formats.
+
+================================================
+Changes from amSigGen 5.3j to amSigGen 6.1:
+------------------------------------------------
+
+The installation package is a gzip'ped tar file.  This preserves symbolic
+links on the Linux system.  If you intend to run the software on 
+Linux, you should unpack it on Linux.  If you are planning to run the software
+on Windows, or for any reason you decide to unpack it on Windows, you may see 
+warnings from your Windows archive extraction application regarding "missing symlinks".  
+These warnings are harmless and have no affect on the Windows-specific amSigGen 
+executable or its supporting files.
+
+Video signatures (fingerprints of the visual data in the video track of a video file) 
+are generated using integrated third-party technology.
+
+The video-fingerprinting library vss1.dll is supplied for win32.
+This library is also included in the linux_XXbit subfolders and is called
+libvss1.so, where "XX" is either "32" or "64".
+
+Video input files result in fingerprints with the extension .amvs (not .amvfp).
+
+Characters in the input media filename and output path (see -i and -o flags) are no 
+longer restricted to letters, numbers, and underscores.
+
+amSigGen now generates a manifest file, which must be submitted to Audible Magic 
+along with the signature file(s).   See amSigGen_readme.txt.
+
+A new tool called parseManifests.exe is supplied.  It is run by amSigGenFolder 
+(on Windows only) and summarizes errors in a batch run.
+
+Video files containing multiple audio streams (such as soundtracks in different languages) 
+will have a separate fingerprint file created for each audio stream.  These multiple
+audio fingerprint files will have names ending with _aXX.am3, where XX is a unique 
+two-digit number such as 00 or 01.
+
+New -m option to specify a metadata file.
+
+New -x option to get info about the input media file's format and then exit.
+
+If audio signature generation fails, amSigGen will still attempt to generate a video signature.
+
+Better support for files greater than 2GB in size.
+
+DRM'd Windows Media files are always reported as such and never fingerprinted. 
+
+Improved error reporting.
+
+
+================================================
+
+KNOWN PROBLEMS
+
+For known problems with the Windows batch scripts, see 
+"Teaming Up With Audible Magic - Content Registration.pdf," Appendix A, Troubleshooting section.
+
