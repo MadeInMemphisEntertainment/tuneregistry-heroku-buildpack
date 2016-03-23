@@ -228,15 +228,15 @@ set-default-env PYTHONPATH /app/
 cp $ROOT_DIR/vendor/python.gunicorn.sh $GUNICORN_PROFILE_PATH
 
 # AudibleMagic setup
-# mkdir -p /app/.heroku/vendor/lib
-# cp $ROOT_DIR/vendor/audiblemagic/* /app/.heroku/vendor/lib
+mkdir -p /app/.heroku/vendor/lib
+cp $ROOT_DIR/vendor/audiblemagic/* /app/.heroku/vendor/lib
 
-# wget http://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.11.tar.gz
-# tar -xvzf libiconv-1.11.tar.gz -C /tmp/
-# cd /tmp/libiconv-1.11
-# ./configure
-# make DESTDIR=/app/tmp install
-# cp /app/tmp/usr/local/lib/libiconv* /app/.heroku/vendor/lib
+wget http://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.11.tar.gz
+tar -xvzf libiconv-1.11.tar.gz -C /tmp/
+cd /tmp/libiconv-1.11
+./configure
+make DESTDIR=/app/tmp install
+cp /app/tmp/usr/local/lib/libiconv* /app/.heroku/vendor/lib
 
 # cd /app/.heroku/vendor/lib
 
