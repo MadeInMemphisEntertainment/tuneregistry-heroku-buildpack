@@ -234,23 +234,23 @@ cp $ROOT_DIR/vendor/audiblemagic/* /app/.heroku/audiblemagic/
 
 cd /app/.heroku/vendor/lib
 
-cp libavcodec.so.52.94.4 libavcodec.so.52
-cp libavcodec.so.52.94.4 libavcodec.so
-
-cp libavcore.so.0.12.1 libavcore.so.0
-cp libavcore.so.0.12.1 libavcore.so
-
-cp libavformat.so.52.84.0 libavformat.so.52
-cp libavformat.so.52.84.0 libavformat.so
-
-cp libavutil.so.50.33.0 libavutil.so.50
-cp libavutil.so.50.33.0 libavutil.so
-
-cp libid3-3.8.so.3.0.0 libid3-3.8.so.3
-cp libid3-3.8.so.3.0.0 libid3-3.8.so
-
-cp libswscale.so.0.12.0 libswscale.so.0
-cp libswscale.so.0.12.0 libswscale.so
+# cp libavcodec.so.52.94.4 libavcodec.so.52
+# cp libavcodec.so.52.94.4 libavcodec.so
+#
+# cp libavcore.so.0.12.1 libavcore.so.0
+# cp libavcore.so.0.12.1 libavcore.so
+#
+# cp libavformat.so.52.84.0 libavformat.so.52
+# cp libavformat.so.52.84.0 libavformat.so
+#
+# cp libavutil.so.50.33.0 libavutil.so.50
+# cp libavutil.so.50.33.0 libavutil.so
+#
+# cp libid3-3.8.so.3.0.0 libid3-3.8.so.3
+# cp libid3-3.8.so.3.0.0 libid3-3.8.so
+#
+# cp libswscale.so.0.12.0 libswscale.so.0
+# cp libswscale.so.0.12.0 libswscale.so
 
 function error() {
   echo " !     $*" >&2
