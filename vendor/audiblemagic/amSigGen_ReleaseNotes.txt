@@ -1,7 +1,60 @@
 RELEASE NOTES
-Audible Magic Signature Generator (amSigGen) for Windows and Linux
-March 13, 2012
+Audible Magic Signature Generator (amSigGen) for Windows, Linux, and Mac
+March 14, 2016
 
+Release 8.3 (Windows, Linux, and Mac OS X)
+
+1. First release that has included a version for Mac.  (All versions
+have the same syntax and functionality.)
+
+2. All versions require 64-bit hardware; 32-bit machines are now
+unsupported.
+
+3. Added the command-line option -e so that a customer-supplied
+"vendor asset ID" (any identifier, such as a catalog number) can be
+embedded into the signature data itself.
+
+4. amSigGen itself can now process multiple media files in a single
+run.  (This feature was formerly supplied only via Windows batch
+scripts, which are now retired and are no longer included with the
+release, although the old batch scripts will probably still work.)
+The relevant new command-line options are:
+  -I for an input directory, with optional -r to specify recursion
+through subdirectories. 
+  -O for an output directory. 
+  -L for a text file listing input media files and (optionally) vendor
+asset IDs.
+  -M to support default metadata filenames when using -I or -L.
+
+5. The -A and -V command-line options are gone.  There is no video
+signature support in this version, so it automatically makes audio
+signatures only.  (The old video signature format is no longer used by
+Audible Magic, though a new format could be introduced in a future
+release.)
+
+6. A simplified message is displayed when the command line is
+incorrect.  The complete list of options is not displayed unless
+called for on the command line (via -h, -?, or --).  Missing or
+incorrect arguments are still displayed upon error, as are
+instructions about how to display the complete list of options.  The
+complete list of options is now followed by some usage examples.
+
+7. The release now includes an ffprobe executable alongside ffmpeg,
+and no longer includes ffmpeg-related libraries.  (The ffprobe
+executable provides more-reliable detection of media information such
+as codecs, and the removal of the libraries increases stability.)
+
+8. The manifest file now includes more information: OS, OS version,
+CPU architecture, signature duration, and information about the ffmpeg
+and ffprobe executables.
+
+9. Name change: "submitted content" is now called "private database."
+The command-line option has accordingly been changed from -S to -P.
+
+10. (Windows only) amSigGen no longer depends on the Windows Media
+library wmvcore.dll.
+
+===============================================
 Release 7.5
 
 1. Fixed bug from 7.4 where untested multichannel (surround-sound) formats were mistakenly accepted.
@@ -190,11 +243,4 @@ DRM'd Windows Media files are always reported as such and never fingerprinted.
 
 Improved error reporting.
 
-
-================================================
-
-KNOWN PROBLEMS
-
-For known problems with the Windows batch scripts, see 
-"Teaming Up With Audible Magic - Content Registration.pdf," Appendix A, Troubleshooting section.
 

@@ -229,7 +229,8 @@ cp $ROOT_DIR/vendor/python.gunicorn.sh $GUNICORN_PROFILE_PATH
 
 # AudibleMagic setup
 mkdir -p /app/.heroku/vendor/lib
-cp $ROOT_DIR/vendor/audiblemagic/* /app/.heroku/vendor/lib
+mkdir -p /app/.heroku/audiblemagic
+cp $ROOT_DIR/vendor/audiblemagic/* /app/.heroku/audiblemagic/
 
 cd /app/.heroku/vendor/lib
 
@@ -363,4 +364,3 @@ if [[ ! "$DOCKER_BUILD" ]]; then
   bpwatch stop anvil_appdir_commit
   bpwatch stop compile
 fi
-
