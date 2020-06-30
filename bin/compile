@@ -332,7 +332,7 @@ fi
 # Django collectstatic support.
 # The buildpack automatically runs collectstatic for Django applications.
 # This is the cause for the majority of build failures on the Python platform.
-# These failures are intentional — if collectstatic (which can be tricky, at times) fails,
+# These failures are intentional — if collectstatic (which can be tricky, at times) fails,
 # your build fails.
 (( start=$(nowms) ))
 sub_env "$BIN_DIR/steps/collectstatic"
@@ -368,7 +368,8 @@ fi
 EOT
 
 # Install sane-default script for $WEB_CONCURRENCY and $FORWARDED_ALLOW_IPS.
-cp $ROOT_DIR/vendor/python.gunicorn.sh $GUNICORN_PROFILE_PATH
+cp "$ROOT_DIR/vendor/WEB_CONCURRENCY.sh" "$WEB_CONCURRENCY_PROFILE_PATH"
+cp "$ROOT_DIR/vendor/python.gunicorn.sh" "$GUNICORN_PROFILE_PATH"
 
 # AudibleMagic setup
 mkdir -p /app/.heroku/vendor/lib
@@ -468,42 +469,30 @@ cd $BUILD_DIR
 # End AudibleMagic
 
 
-# Experimental post_compile hook.
-bpwatch start post_compile
-  source $BIN_DIR/steps/hooks/post_compile
-bpwatch stop post_compile
+# Experimental post_compile hook. Don't remove this.
+# shellcheck source=bin/steps/hooks/post_compile
+source "$BIN_DIR/steps/hooks/post_compile"
 
-# Store new artifacts in cache.
-bpwatch start dump_cache
+# Fix egg-links, again.
+# shellcheck source=bin/steps/eggpath-fix2
+source "$BIN_DIR/steps/eggpath-fix2"
 
-  rm -rf $CACHE_DIR/.heroku/python
-  rm -rf $CACHE_DIR/.heroku/python-version
-  rm -rf $CACHE_DIR/.heroku/python-stack
-  rm -rf $CACHE_DIR/.heroku/vendor
-  rm -rf $CACHE_DIR/.heroku/venv
+# Store new artifacts in the cache.
+rm -rf "$CACHE_DIR/.heroku/python"
+rm -rf "$CACHE_DIR/.heroku/python-version"
+rm -rf "$CACHE_DIR/.heroku/python-stack"
+rm -rf "$CACHE_DIR/.heroku/vendor"
+rm -rf "$CACHE_DIR/.heroku/src"
 
-  mkdir -p $CACHE_DIR/.heroku
-  cp -R .heroku/python $CACHE_DIR/.heroku/
-  cp -R .heroku/python-version $CACHE_DIR/.heroku/
-  cp -R .heroku/python-stack $CACHE_DIR/.heroku/ &> /dev/null || true
-  cp -R .heroku/vendor $CACHE_DIR/.heroku/ &> /dev/null || true
-  cp -R .heroku/venv $CACHE_DIR/.heroku/ &> /dev/null || true
-
-bpwatch stop dump_cache
-
-# Fin.
-if [[ ! "$DOCKER_BUILD" ]]; then
-
-  bpwatch start appdir_commit
-    deep-rm $ORIG_BUILD_DIR
-    deep-mv $BUILD_DIR $ORIG_BUILD_DIR
-  bpwatch stop appdir_commit
-
-  bpwatch start anvil_appdir_commit
-  if [ "$SLUG_ID" ]; then
-    deep-mv $TMP_APP_DIR $APP_DIR
-  fi
-
-  bpwatch stop anvil_appdir_commit
-  bpwatch stop compile
+mkdir -p "$CACHE_DIR/.heroku"
+cp -R .heroku/python "$CACHE_DIR/.heroku/"
+cp -R .heroku/python-version "$CACHE_DIR/.heroku/"
+cp -R .heroku/python-stack "$CACHE_DIR/.heroku/" &> /dev/null || true
+cp -R .heroku/vendor "$CACHE_DIR/.heroku/" &> /dev/null || true
+if [[ -d .heroku/src ]]; then
+  cp -R .heroku/src "$CACHE_DIR/.heroku/" &> /dev/null || true
 fi
+
+# Measure the size of the Python installation.
+# shellcheck disable=SC2119
+mmeasure 'python.size' "$(measure-size)"
