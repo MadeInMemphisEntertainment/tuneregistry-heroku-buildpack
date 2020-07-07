@@ -8,8 +8,11 @@ CACHE_DIR=$2
 ENV_DIR=$3
 
 # AudibleMagic setup
+echo "Make /app/.heroku/vendor/lib"
 mkdir -p /app/.heroku/vendor/lib
+echo "Make /app/.heroku/audiblemagic"
 mkdir -p /app/.heroku/audiblemagic
+echo $ROOT_DIR
 cp $ROOT_DIR/vendor/audiblemagic/* /app/.heroku/audiblemagic/
 
 cd /app/.heroku/vendor/lib
