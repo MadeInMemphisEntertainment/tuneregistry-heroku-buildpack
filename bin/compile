@@ -18,7 +18,7 @@ ls $ROOT_DIR
 ls $ROOT_DIR/vendor
 ls $ROOT_DIR/vendor/audiblemagic
 echo "-----"
-cp -rf $ROOT_DIR/vendor/audiblemagic "$CACHE_DIR/.heroku"
+cp -rf $ROOT_DIR/vendor/audiblemagic "$BUILD_DIR/.heroku"
 
 # cp libavcodec.so.52.94.4 libavcodec.so.52
 # cp libavcodec.so.52.94.4 libavcodec.so
@@ -54,6 +54,21 @@ function indent() {
     *)      sed -u "$c";;
   esac
 }
+
+export_env_dir() {
+  env_dir=$1
+  acceptlist_regex=${2:-''}
+  denylist_regex=${3:-'^(PATH|GIT_DIR|CPATH|CPPATH|LD_PRELOAD|LIBRARY_PATH)$'}
+  if [ -d "$env_dir" ]; then
+    for e in $(ls $env_dir); do
+      echo "$e" | grep -E "$acceptlist_regex" | grep -qvE "$denylist_regex" &&
+      export "$e=$(cat $env_dir/$e)"
+      :
+    done
+  fi
+}
+
+export_env_dir()
 
 APT_CACHE_DIR="$CACHE_DIR/apt/cache"
 APT_STATE_DIR="$CACHE_DIR/apt/state"
@@ -105,6 +120,7 @@ export INCLUDE_PATH="$BUILD_DIR/.apt/usr/include:$INCLUDE_PATH"
 export CPATH="$INCLUDE_PATH"
 export CPPPATH="$INCLUDE_PATH"
 export PKG_CONFIG_PATH="$BUILD_DIR/.apt/usr/lib/x86_64-linux-gnu/pkgconfig:$BUILD_DIR/.apt/usr/lib/i386-linux-gnu/pkgconfig:$BUILD_DIR/.apt/usr/lib/pkgconfig:$PKG_CONFIG_PATH"
+
 
 cd $BUILD_DIR
 
