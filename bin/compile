@@ -8,16 +8,6 @@ CACHE_DIR=$2
 ENV_DIR=$3
 
 # AudibleMagic setup
-echo "Make /app/.heroku/vendor/lib"
-mkdir -p /app/.heroku/vendor/lib
-echo "Make /app/.heroku/audiblemagic"
-mkdir -p /app/.heroku/audiblemagic
-echo $ROOT_DIR
-echo "-----"
-ls $ROOT_DIR
-ls $ROOT_DIR/vendor
-ls $ROOT_DIR/vendor/audiblemagic
-echo "-----"
 cp -rf $ROOT_DIR/vendor/audiblemagic "$BUILD_DIR/.heroku"
 
 # cp libavcodec.so.52.94.4 libavcodec.so.52
