@@ -1,5 +1,12 @@
 #!/usr/bin/env bash
 
+# Paths.
+BIN_DIR=$(cd $(dirname $0); pwd) # absolute path
+ROOT_DIR=$(dirname $BIN_DIR)
+BUILD_DIR=$1
+CACHE_DIR=$2
+ENV_DIR=$3
+
 # AudibleMagic setup
 mkdir -p /app/.heroku/vendor/lib
 mkdir -p /app/.heroku/audiblemagic
